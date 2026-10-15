@@ -1,0 +1,62 @@
+class Solution {
+   public:
+    [[nodiscard]]
+    inline constexpr char getClosingBracket(const char s) {
+        char out;
+        switch (s) {
+            case '[':
+                out = ']';
+                break;
+            case '{':
+                out = '}';
+                break;
+            case '(':
+                out = ')';
+                break;
+        }
+        return out;
+    };
+
+    [[nodiscard]]
+    inline constexpr bool isOpenBracket(const char& s) {
+        if (s == '(' || s == '{' || s == '[') {
+            return true;
+        }
+        return false;
+    };
+
+    bool isValid(string s) {
+        if (s.size() == 0) {
+            return true;
+        }
+        if (s.size() % 2 != 0) {
+            return false;
+        }
+
+        std::deque<char> stacket;
+        for (auto& bracket : s) {
+            std::cout << "checking " << bracket << std::endl;
+            if (stacket.empty() && !isOpenBracket(bracket)) {
+                return false;
+            } else if (isOpenBracket(bracket)) {
+                stacket.push_back(bracket);
+                continue;
+            }
+            // Its a close bracket
+            else {
+                std::cout << "comparing " << bracket << " with "
+                          << getClosingBracket(stacket.back()) << std::endl;
+                if (bracket == getClosingBracket(stacket.back())) {
+                    stacket.erase(stacket.end());
+                    continue;
+                } else {
+                    return false;
+                }
+            }
+        }
+        if (stacket.size() > 0) {
+            return false;
+        }
+        return true;
+    };
+};
